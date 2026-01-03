@@ -3,9 +3,14 @@
 from setuptools import setup, find_packages
 from pathlib import Path
 
-# Read README
+# Read README with UTF-8 encoding (fixes Windows encoding issues)
 readme_file = Path(__file__).parent / "README.md"
-long_description = readme_file.read_text() if readme_file.exists() else ""
+long_description = ""
+if readme_file.exists():
+    try:
+        long_description = readme_file.read_text(encoding='utf-8')
+    except Exception:
+        long_description = ""
 
 setup(
     name="stt-keyboard",
