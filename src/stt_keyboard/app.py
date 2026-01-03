@@ -170,6 +170,8 @@ class STTKeyboardApp:
         """Initialize overlay widget"""
         self.overlay = OverlayWidget()
         self.overlay.show()
+        self.overlay.raise_()
+        self.overlay.activateWindow()
         self.logger.info("Overlay widget initialized")
 
     def _init_tray_icon(self):
@@ -346,6 +348,11 @@ class STTKeyboardApp:
             Exit code
         """
         self.logger.info("Starting application main loop")
+
+        # Ensure overlay is visible after event loop starts
+        if self.overlay:
+            QTimer.singleShot(100, lambda: self.overlay.raise_())
+
         return self.app.exec()
 
     def shutdown(self):

@@ -35,15 +35,17 @@ class OverlayWidget(QWidget):
             Qt.WindowType.Tool
         )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
+        # Removed WA_ShowWithoutActivating to ensure visibility
 
         # Size and position
         self.setFixedSize(400, 150)
 
         # Position in bottom-right corner by default
         from PyQt6.QtWidgets import QApplication
-        screen = QApplication.primaryScreen().geometry()
-        self.move(screen.width() - 420, screen.height() - 200)
+        screen = QApplication.primaryScreen().availableGeometry()
+        x = screen.x() + screen.width() - 420
+        y = screen.y() + screen.height() - 200
+        self.move(x, y)
 
         # Layout
         layout = QVBoxLayout(self)
@@ -124,6 +126,11 @@ class OverlayWidget(QWidget):
         if state != ApplicationState.LISTENING:
             self.partial_text = ""
             self.text_label.setText("")
+
+        # Ensure overlay is visible and on top
+        if not self.isVisible():
+            self.show()
+        self.raise_()
 
         # Trigger repaint for background color change
         self.update()
