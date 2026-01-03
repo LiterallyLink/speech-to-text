@@ -1,0 +1,48 @@
+# STT Keyboard Application Requirements
+# Python 3.10+ required
+
+# GUI Framework
+PyQt6>=6.6.0
+PyQt6-Qt6>=6.6.0
+
+# Speech Recognition
+vosk>=0.3.45
+
+# Audio Capture
+sounddevice>=0.4.6
+pyaudio>=0.2.14  # Alternative audio backend
+
+# Keyboard Simulation
+keyboard>=0.13.5
+
+# System Tray (fallback)
+pystray>=0.19.5
+pillow>=10.0.0
+
+# Configuration
+pyyaml>=6.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# Audio Processing
+numpy>=1.24.0,<2.0.0
+
+# Logging
+loguru>=0.7.0  # Optional, better logging
+
+# Platform-specific
+pywin32>=306; platform_system=="Windows"
+pyobjc-framework-Cocoa>=10.0; platform_system=="Darwin"
+python-xlib>=0.33; platform_system=="Linux"
+
+# Development
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.0.0
+
+# Building/Distribution
+pyinstaller>=6.0.0
+setuptools>=68.0.0
+wheel>=0.41.0
