@@ -43,7 +43,7 @@ binaries = []
 
 # Analysis
 a = Analysis(
-    ['src/stt_keyboard/__main__.py'],
+    ['launcher.py'],
     pathex=[],
     binaries=binaries,
     datas=datas,
