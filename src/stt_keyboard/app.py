@@ -79,7 +79,38 @@ class STTKeyboardApp:
 
     def _init_speech_engine(self):
         """Initialize speech recognition engine"""
+        from .gui.model_downloader import ModelDownloaderDialog
+        from PyQt6.QtWidgets import QMessageBox
+
         speech_config = self.config.speech
+
+        # Check if model exists
+        model_path = Path(speech_config.model_path)
+        if not model_path.exists():
+            self.logger.warning(f"Model not found at {model_path}")
+
+            # Show download dialog
+            reply = QMessageBox.question(
+                None,
+                "Model Not Found",
+                "No speech recognition model found. Would you like to download one now?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            )
+
+            if reply == QMessageBox.StandardButton.Yes:
+                dialog = ModelDownloaderDialog()
+                if dialog.exec():
+                    downloaded_path, language = dialog.get_model_info()
+                    if downloaded_path:
+                        # Update config with new model
+                        self.config.speech.model_path = downloaded_path
+                        self.config.speech.language = language
+                        self.config_manager.save_config(self.config)
+                        speech_config = self.config.speech
+                else:
+                    raise Exception("Model download cancelled by user")
+            else:
+                raise Exception("Model required to run application")
 
         try:
             self.speech_engine = SpeechEngine(
@@ -91,7 +122,6 @@ class STTKeyboardApp:
             self.logger.info(f"Speech engine initialized: {speech_config.language}")
         except FileNotFoundError as e:
             self.logger.error(f"Speech model not found: {e}")
-            self.logger.error("Please download a model using: python scripts/download_model.py --language en-us --size small")
             raise
 
     def _init_keyboard_simulator(self):
