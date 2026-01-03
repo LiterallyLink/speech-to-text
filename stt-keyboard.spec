@@ -84,7 +84,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='resources/icon.ico' if sys.platform == 'win32' else None,  # Add icon if available
+    icon=None,  # Set to 'resources/icon.ico' if you have an icon file
 )
 
 # Collect files for distribution
