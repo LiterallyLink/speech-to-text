@@ -54,4 +54,4 @@ models/
 Thumbs.db
 
 # Distribution
-*.spec
+# *.spec (allow stt-keyboard.spec for PyInstaller)
