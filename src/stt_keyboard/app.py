@@ -12,6 +12,7 @@ from .core.speech_engine import SpeechEngine
 from .core.keyboard_simulator import KeyboardSimulator
 from .core.hotkey_manager import HotkeyManager
 from .gui.tray_icon import TrayIcon
+from .gui.overlay_widget import OverlayWidget
 from .config.config_manager import ConfigManager
 from .plugins.plugin_loader import PluginLoader
 from .utils.logger import setup_logger
@@ -36,6 +37,7 @@ class STTKeyboardApp:
 
         # GUI
         self.tray_icon = None
+        self.overlay = None
 
         # Qt application
         self.app = None
@@ -56,6 +58,7 @@ class STTKeyboardApp:
         self._init_plugins()
 
         # Initialize GUI
+        self._init_overlay()
         self._init_tray_icon()
 
         # Setup signal handlers
@@ -163,6 +166,12 @@ class STTKeyboardApp:
             except Exception as e:
                 self.logger.error(f"Failed to load plugin {plugin_name}: {e}")
 
+    def _init_overlay(self):
+        """Initialize overlay widget"""
+        self.overlay = OverlayWidget()
+        self.overlay.show()
+        self.logger.info("Overlay widget initialized")
+
     def _init_tray_icon(self):
         """Initialize system tray icon"""
         self.tray_icon = TrayIcon(
@@ -230,7 +239,9 @@ class STTKeyboardApp:
             text: Partial transcription text
         """
         self.logger.debug(f"Partial: {text}")
-        # Could show in a small overlay window
+        # Update overlay with partial text
+        if self.overlay:
+            self.overlay.update_partial_text(text)
 
     def _on_final_transcription(self, text: str):
         """
@@ -311,6 +322,10 @@ class STTKeyboardApp:
         # Update tray icon to reflect state
         if self.tray_icon:
             self.tray_icon.update_state(new_state)
+
+        # Update overlay to reflect state
+        if self.overlay:
+            self.overlay.update_state(new_state)
 
     def _signal_handler(self, signum, frame):
         """
