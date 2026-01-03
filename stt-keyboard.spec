@@ -44,7 +44,7 @@ binaries = []
 # Analysis
 a = Analysis(
     ['launcher.py'],
-    pathex=[],
+    pathex=['src'],
     binaries=binaries,
     datas=datas,
     hiddenimports=hiddenimports,
